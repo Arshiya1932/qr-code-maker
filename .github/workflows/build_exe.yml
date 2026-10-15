@@ -1,0 +1,31 @@
+name: Build Windows EXE
+
+on:
+  workflow_dispatch: # This lets you trigger it manually from GitHub
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install qrcode[pil] Pillow tkinterdnd2 opencv-python numpy pyinstaller
+
+    - name: Build EXE with PyInstaller
+      run: pyinstaller --noconfirm --onefile --windowed --name "QrCodeMaker" --collect-all tkinterdnd2 QrCodeMaker.py
+
+    - name: Upload EXE as Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: QrCodeMaker_EXE
+        path: dist/QrCodeMaker.exe
