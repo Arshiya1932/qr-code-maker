@@ -1,0 +1,5 @@
+qrcode[pil]
+Pillow
+tkinterdnd2
+opencv-python
+numpy
